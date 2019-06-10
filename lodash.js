@@ -14883,40 +14883,12 @@
   }
   // Check for `exports` after `define` in case a build optimizer adds an `exports` object.
   else if (freeExports && freeModule) {
-    var LODASH_TO_NATIVE = {
-      'concat': 'https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/concat',
-      'filter': 'https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/filter',
-      'each': 'https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach',
-      'find': 'https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/find',
-      'findIndex': 'https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex',
-      'forEach': 'https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach',
-      'map': 'https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/map'
-    };
-    var warned = {};
-
-    var _Proxy = new Proxy(_, {
-      get: (target, prop, receiver) => {
-        if (warned[prop]) {
-          return Reflect.get(target, prop, receiver);
-        }
-        warned[prop] = true;
-
-        if (LODASH_TO_NATIVE[prop]) {
-          console.error("Warning: Don't use lodash." + prop + " - native version available - See: " + LODASH_TO_NATIVE[prop])
-        } else {
-          console.error("Warning: Don't use lodash module. Replace with native ES6+ version or use lodash-new module.")
-        }
-
-        return Reflect.get(target, prop, receiver);
-      }
-    });
-
     // Export for Node.js.
     if (moduleExports) {
-      (freeModule.exports = _Proxy)._ = _Proxy;
+      (freeModule.exports = _)._ = _;
     }
     // Export for CommonJS support.
-    freeExports._ = _Proxy;
+    freeExports._ = _;
   }
   else {
     // Export to the global object.
